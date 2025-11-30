@@ -295,7 +295,9 @@
                     result = JSON.parse(text);
                 } catch (e) {
                     console.error('Invalid JSON response:', text);
-                    throw new Error('Server returned invalid JSON: ' + text.substring(0, 100));
+                    // Show the first 200 characters of the response to the user for debugging
+                    const preview = text.substring(0, 200).replace(/</g, '&lt;');
+                    throw new Error(`Server returned invalid JSON. Response: "${preview}..."`);
                 }
 
                 if (response.ok) {
