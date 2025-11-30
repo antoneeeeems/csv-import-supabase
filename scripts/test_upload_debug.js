@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 async function uploadFile() {
-    const filePath = path.join(__dirname, 'airlines.csv');
+    const filePath = path.join(__dirname, '../data/csv/airlines.csv');
     // Create a dummy file if it doesn't exist
     if (!fs.existsSync(filePath)) {
         fs.writeFileSync(filePath, 'header1,header2\nval1,val2');

@@ -1,43 +1,8 @@
-require('dotenv').config();
-const express = require('express');
-const multer = require('multer');
-const { Pool } = require('pg');
 const fs = require('fs');
 const csv = require('csv-parser');
-const { from: copyFrom } = require('pg-copy-streams');
-const path = require('path');
+const pool = require('../config/db');
 
-// Check for .env file
-if (!process.env.DATABASE_URL) {
-    console.warn('WARNING: DATABASE_URL is not defined in environment variables.');
-} else {
-    console.log('DATABASE_URL is set.');
-}
-
-const app = express();
-if (!fs.existsSync('uploads')) {
-  console.log('Creating uploads directory...');
-  fs.mkdirSync('uploads');
-}
-const upload = multer({ dest: 'uploads/' });
-
-// Global error handler
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
-
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
-});
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
-
-app.use(express.static('public'));
-
-app.post('/upload', upload.single('file'), async (req, res) => {
+const uploadFile = async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
@@ -233,18 +198,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
       try { fs.unlinkSync(filePath); } catch(e) {}
       if (!res.headersSent) res.status(500).json({ error: 'Error reading file' });
   });
-});
+};
 
-// Global error handler
-app.use((err, req, res, next) => {
-    console.error('Global Error Handler:', err);
-    if (res.headersSent) {
-        return next(err);
-    }
-    res.status(500).json({ error: 'An unexpected error occurred: ' + (err.message || err) });
-});
-
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+module.exports = {
+  uploadFile
+};

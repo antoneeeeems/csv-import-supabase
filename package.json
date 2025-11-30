@@ -1,4 +1,14 @@
 {
+  "name": "csv-import-supabase",
+  "version": "1.0.0",
+  "description": "CSV to Supabase Importer",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "debug-schema": "node scripts/debug_schema.js",
+    "test-db": "node scripts/test_db.js",
+    "test-upload": "node scripts/test_upload_debug.js"
+  },
   "dependencies": {
     "csv-parser": "^3.2.0",
     "dotenv": "^17.2.3",
