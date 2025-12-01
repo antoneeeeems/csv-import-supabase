@@ -38,7 +38,7 @@ This project is a robust Node.js application designed to streamline the process 
 
 1.  Start the server:
     ```bash
-    node server.js
+    npm start, or node src/server.js
     ```
 
 2.  Open your browser and navigate to:
